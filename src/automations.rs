@@ -1,4 +1,3 @@
-use chrono::Utc;
 use reqwest::Client;
 
 pub async fn run_automations() {
@@ -35,7 +34,7 @@ async fn is_storm() -> bool {
         .json::<serde_json::Value>().await.unwrap()["daily"]["weather_code"][0].as_i64().unwrap() == 95 // Storm
 }
 
-async fn control_device(action: &str) {
+async fn control_device(_action: &str) {
     // Dispatch to specific integration
     // e.g., for EVs: OCPP SetChargingProfile for load balance
 }

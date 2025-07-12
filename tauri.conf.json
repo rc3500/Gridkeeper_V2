@@ -1,8 +1,22 @@
 {
-  "productName": "Gridkeeper",
-  "windows": [{ "fullscreen": false, "width": 800, "height": 600 }],
+  "package": {
+    "productName": "Gridkeeper",
+    "version": "0.1.0"
+  },
+  "tauri": {
+    "allowlist": {
+      "all": true
+    },
+    "windows": [
+      {
+        "fullscreen": false,
+        "width": 800,
+        "height": 600
+      }
+    ]
+  },
   "build": {
-    "beforeBuildCommand": "cargo build",
-    "frontendDist": "../frontend"
+    "distDir": "../frontend",
+    "beforeBuildCommand": "cargo build"
   }
 }

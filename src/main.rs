@@ -3,15 +3,15 @@ mod api;
 mod integrations;
 mod automations;
 
-use actix_web::{App, HttpServer};
+use actix_web::{web, App, HttpServer};
 use dotenv::dotenv;
 use sqlx::PgPool;
-use tauri::{self, Manager};
+use tauri::{self};
 
 #[tokio::main]
 async fn main() {
     dotenv().ok();
-    let pool = setup_db().await;
+    let _pool = setup_db().await;  // Prefix with _ to fix unused warning
 
     // Spawn automations
     tokio::spawn(automations::run_automations());
@@ -31,8 +31,8 @@ async fn main() {
 }
 
 async fn setup_db() -> PgPool {
-    // Connect and create tables for devices, plans, etc.
-    // ...
+    let db_url = std::env::var("DATABASE_URL").expect("DATABASE_URL must be set");
+    PgPool::connect(&db_url).await.expect("Failed to connect to DB")
 }
 
 #[tauri::command]

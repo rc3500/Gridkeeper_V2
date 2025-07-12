@@ -23,6 +23,7 @@ pub struct Telemetry {
     pub power_load: f64,
 }
 
+#[allow(dead_code)]  // Added to fix unused fields warning
 #[derive(Deserialize, Debug)]
 pub struct AutomationRule {
     pub condition: String, // e.g., "price < 0"

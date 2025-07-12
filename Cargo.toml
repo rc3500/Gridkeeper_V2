@@ -14,7 +14,7 @@ tokio = { version = "1", features = ["full"] }
 dotenv = "0.15"
 chrono = "0.4"
 tauri = { version = "1", features = ["api-all"] }
-// Add if needed: ocpp-rs, goodwe-api, etc. (search crates.io for proxies)
+# Add if needed: ocpp-rs, goodwe-api, etc. (search crates.io for proxies)
 
 [build-dependencies]
-tauri-build = "1"
+tauri-build = { version = "1", features = [] }

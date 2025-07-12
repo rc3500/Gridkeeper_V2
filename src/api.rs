@@ -3,7 +3,6 @@ use reqwest::Client;
 use sqlx::PgPool;
 use crate::models::{Device, EnergyPlan, Telemetry};
 
-// Onboarding (extend for each inverter type)
 pub async fn onboard_device(pool: web::Data<PgPool>, body: web::Json<Device>) -> HttpResponse {
     // Call specific API based on type_ (e.g., Fronius POST /registrations)
     // Store in DB
@@ -13,7 +12,6 @@ pub async fn onboard_device(pool: web::Data<PgPool>, body: web::Json<Device>) ->
     HttpResponse::Ok().body("Device onboarded")
 }
 
-// AER Plans
 pub async fn get_plans() -> HttpResponse {
     let client = Client::new();
     let plans = client.get("https://cdr.energymadeeasy.gov.au/cds-au/v1/energy/plans")
@@ -22,7 +20,7 @@ pub async fn get_plans() -> HttpResponse {
     HttpResponse::Ok().json(plans)
 }
 
-// Telemetry Poll (example for Sungrow; replicate for others)
+#[allow(dead_code)]  // Added to fix unused function warning
 pub async fn get_telemetry(device_id: &str) -> Telemetry {
     let client = Client::new();
     client.post("https://developer-api.isolarcloud.com/v2/device/getDevicePointData")

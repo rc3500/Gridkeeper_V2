@@ -8,6 +8,7 @@ use reqwest::Client;
 // OCPP: Use ocpp-rs for ws:// to control chargers, load balance via SetChargingProfile
 // Shelly: HTTP GET /relay/0?turn=on
 
+#[allow(dead_code)]  // Added to fix unused function warning
 pub async fn control_shelly(action: &str) {
     let client = Client::new();
     client.get(format!("http://{}/relay/0?turn={}", std::env::var("SHELLY_IP").unwrap(), action))
