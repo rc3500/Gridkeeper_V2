@@ -1,0 +1,12 @@
+name: Gridkeeper
+version: "0.1.0"
+slug: gridkeeper
+description: Energy automation for inverters/EVs
+url: https://github.com/rc3500/Gridkeeper_V2
+arch: [aarch64, amd64]
+startup: application
+boot: auto
+ports: { 8080/tcp: 8080 }
+map: [config:rw]
+options: {}
+schema: {}
