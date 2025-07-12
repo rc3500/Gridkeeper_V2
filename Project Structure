@@ -1,0 +1,19 @@
+Gridkeeper_V2/
+├── Cargo.toml              # Rust dependencies
+├── Dockerfile              # For cloud/local Docker
+├── README.md               # Repo overview
+├── addon/                  # Home Assistant add-on
+│   ├── config.yaml
+│   └── run.sh
+├── src/                    # Rust source
+│   ├── main.rs             # Entry point
+│   ├── api.rs              # API endpoints (onboarding, plans, controls)
+│   ├── integrations.rs     # Inverter/EV/Shelly stubs
+│   ├── automations.rs      # Rules engine
+│   └── models.rs           # Data structs
+├── tauri.conf.json         # Tauri config for GUI/EXE
+├── frontend/               # Svelte for GUI (charts, wizard)
+│   ├── index.html
+│   ├── app.svelte          # Main app with charts
+│   └── package.json        # JS deps (if needed; Tauri handles)
+└── .env.example            # Sample env vars
