@@ -16,9 +16,7 @@
     ]
   },
   "build": {
-    "devPath": "http://localhost:5173",  // Added for dev mode (Vite server)
-    "distDir": "../frontend/dist",  // Updated to point to built assets
-    "beforeDevCommand": "yarn dev",  // Runs Vite dev server automatically
-    "beforeBuildCommand": "yarn build"  // Builds frontend for production
+    "distDir": "../frontend",
+    "beforeBuildCommand": "cargo build"
   }
 }

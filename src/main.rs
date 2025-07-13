@@ -10,8 +10,10 @@ use tauri::{self};
 
 #[tokio::main]
 async fn main() {
-    dotenv().ok();
-    let _pool = setup_db().await;  // Prefix with _ to fix unused warning
+    if dotenv().is_err() {
+        eprintln!("Warning: Failed to load .env file—using defaults or env vars.");
+    }
+    let _pool = setup_db().await;
 
     // Spawn automations
     tokio::spawn(automations::run_automations());
@@ -22,16 +24,20 @@ async fn main() {
         .run(tauri::generate_context!())
         .unwrap();
 
-    // Actix API
+    // Actix API (added retailer endpoint)
     HttpServer::new(move || App::new()
         .service(web::resource("/onboard").route(web::post().to(api::onboard_device)))
+        .service(web::resource("/onboard_retailer").route(web::post().to(api::onboard_retailer)))
         .service(web::resource("/plans").route(web::get().to(api::get_plans))))
         .bind("0.0.0.0:8080").unwrap()
         .run().await.unwrap();
 }
 
 async fn setup_db() -> PgPool {
-    let db_url = std::env::var("DATABASE_URL").expect("DATABASE_URL must be set");
+    let db_url = std::env::var("DATABASE_URL").unwrap_or_else(|_| {
+        eprintln!("Warning: DATABASE_URL not set—using default.");
+        "postgres://postgres:password@localhost/gridkeeper".to_string()
+    });
     PgPool::connect(&db_url).await.expect("Failed to connect to DB")
 }
 

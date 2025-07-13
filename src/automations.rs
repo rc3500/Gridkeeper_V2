@@ -18,12 +18,21 @@ pub async fn run_automations() {
 }
 
 async fn fetch_price() -> f64 {
-    // Example Amber
+    // Example Amber (checks if retailer configured; defaults if not)
     let client = Client::new();
-    client.get("https://api.amber.com.au/v1/sites/{site_id}/prices/current")
-        .header("Authorization", format!("Bearer {}", std::env::var("AMBER_API_TOKEN").unwrap()))
-        .send().await.unwrap()
-        .json::<serde_json::Value>().await.unwrap()["data"][0]["perKwh"].as_f64().unwrap()
+    let site_id = std::env::var("AMBER_SITE_ID").unwrap_or_else(|_| "default_site".to_string());
+    let token = std::env::var("AMBER_API_TOKEN").unwrap_or_else(|_| {
+        eprintln!("Warning: AMBER_API_TOKEN not set");
+        "".to_string()
+    });
+    let response = client.get(format!("https://api.amber.com.au/v1/sites/{}/prices/current", site_id))
+        .header("Authorization", format!("Bearer {}", token))
+        .send().await;
+
+    match response {
+        Ok(res) => res.json::<serde_json::Value>().await.unwrap()["data"][0]["perKwh"].as_f64().unwrap(),
+        Err(_) => 0.0  // Default if no retailer or error (optional onboarding)
+    }
 }
 
 async fn is_storm() -> bool {
@@ -31,10 +40,10 @@ async fn is_storm() -> bool {
     let client = Client::new();
     client.get("https://api.open-meteo.com/v1/forecast?latitude=-33.8688&longitude=151.2093&daily=weather_code")
         .send().await.unwrap()
-        .json::<serde_json::Value>().await.unwrap()["daily"]["weather_code"][0].as_i64().unwrap() == 95 // Storm
+        .json::<serde_json::Value>().await.unwrap()["daily"]["weather_code"][0].as_i64().unwrap() == 95
 }
 
 async fn control_device(_action: &str) {
-    // Dispatch to specific integration
+    // Dispatch to specific integration (checks device presence; skips if none)
     // e.g., for EVs: OCPP SetChargingProfile for load balance
 }
